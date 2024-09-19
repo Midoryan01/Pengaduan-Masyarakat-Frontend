@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Petugas, Pengaduan, FormData } from './type';
+import { Petugas, Pengaduan, FormData } from '../../types/type';
 import DatePickerTwo from '../../components/Forms/DatePicker/DatePickerTwo';
 
 const FormTanggapan: React.FC = () => {
