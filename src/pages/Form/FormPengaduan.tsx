@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { toast, Toaster } from 'react-hot-toast';
+import ReligionDropdown from './Pengaduan/ReligionDropdown';
 
 const FormPengaduan: React.FC = () => {
+
   const [nama, setNama] = useState("");
   const [alamat, setAlamat] = useState("");
   const [nik, setNik] = useState("");
@@ -175,20 +177,10 @@ const FormPengaduan: React.FC = () => {
               </div>
 
               {/* Field Agama */}
-              <div className="mb-4.5">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Agama <span className="text-meta-1">*</span>
-                </label>
-                <input
-                  type="text"
-                  name="agama"
-                  value={agama}
-                  onChange={(e) => setAgama(e.target.value)}
-                  placeholder="Masukan Agama Anda"
-                  required
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                />
-              </div>
+              <ReligionDropdown
+                value={agama}
+                onChange={(value) => setAgama(value)}
+              />
 
               {/* Field Bukti */}
               <div className="mb-4.5">
