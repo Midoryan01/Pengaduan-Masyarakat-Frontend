@@ -8,8 +8,9 @@ import {
   PrinterIcon,
 } from '@heroicons/react/20/solid'; // Import icons
 import * as XLSX from 'xlsx'; // Import the xlsx library
-import { Pengaduan } from './type';
+import { Pengaduan } from '../../types/type';
 import ModalPengaduan from './Pengaduan/ModalPengaduan';
+import exportToExcelPengaduan from './Pengaduan/ExportPengaduan';
 
 const TabelPengaduan: React.FC = () => {
   const [pengaduanData, setPengaduanData] = useState<Pengaduan[]>([]);
@@ -110,80 +111,9 @@ const TabelPengaduan: React.FC = () => {
     setSelectedPengaduan(null);
   };
 
-  const exportToExcel = () => {
-    const dataToExport = filteredData.map((item) => ({
-      Nama: item.nama,
-      Alamat: item.alamat,
-      NIK: item.nik,
-      Agama: item.agama,
-      Keperluan: item.keperluan,
-      'Telp/Email': item.telp_email,
-      Umur: item.umur,
-      Bukti: item.bukti
-      ? `http://localhost:5000/images/${item.bukti}`
-      : 'Tidak ada bukti',
-      Status: item.status,
-      'Tanggal Dibuat': new Date(item.createdAt).toLocaleDateString(),
-    }));
-  
-    const ws = XLSX.utils.json_to_sheet(dataToExport);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'PengaduanData');
-  
-    // Add hyperlinks to the Bukti column
-    const range = XLSX.utils.decode_range(ws['!ref'] || 'A1');
-    const buktiCol = dataToExport[0]
-      ? Object.keys(dataToExport[0]).indexOf('Bukti')
-      : -1;
-  
-    for (let R = range.s.r + 1; R <= range.e.r; ++R) {
-      const cell = ws[XLSX.utils.encode_cell({ r: R, c: buktiCol })];
-      if (cell && cell.v && cell.v !== 'Tidak ada bukti') {
-        cell.l = { Target: cell.v };
-        cell.t = 'str';
-        cell.v = 'Lihat Bukti';
-      }
-    }
-  
-    // Adjust column widths and wrap text
-    const colWidths = [
-      { wch: 20 }, // Nama
-      { wch: 50 }, // Alamat (long text, wrap)
-      { wch: 20 }, // NIK
-      { wch: 15 }, // Agama
-      { wch: 50 }, // Keperluan (long text, wrap)
-      { wch: 20 }, // Telp/Email
-      { wch: 10 }, // Umur
-      { wch: 15 }, // Bukti
-      { wch: 15 }, // Status
-      { wch: 15 }, // Tanggal Dibuat
-    ];
-    ws['!cols'] = colWidths;
-  
-    // Wrap text for specific columns (Alamat, Keperluan)
-    const wrapColumns = [1, 4]; // Index of Alamat and Keperluan
-    wrapColumns.forEach((colIndex) => {
-      for (let R = range.s.r + 1; R <= range.e.r; ++R) {
-        const cell = ws[XLSX.utils.encode_cell({ r: R, c: colIndex })];
-        if (cell) {
-          cell.s = {
-            alignment: {
-              wrapText: true, // Enable text wrapping
-              vertical: 'center',
-              horizontal: 'left',
-            },
-          };
-        }
-      }
-    });
-  
-    // Adjust row heights for better readability
-    const rowHeights = Array(range.e.r - range.s.r + 1).fill({ hpx: 75 });
-    ws['!rows'] = rowHeights;
-  
-    XLSX.writeFile(wb, 'pengaduan_data.xlsx');
+  const handleExport = () => {
+    exportToExcelPengaduan(filteredData, indexOfFirstItem);
   };
-  
   
 
   return (
@@ -254,7 +184,7 @@ const TabelPengaduan: React.FC = () => {
       </div>
       <div className="mb-4">
         <button
-          onClick={exportToExcel}
+          onClick={handleExport}
           className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded transition duration-300 ease-in-out transform hover:scale-105"
         >
           Export to Excel
