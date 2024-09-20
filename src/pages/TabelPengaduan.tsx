@@ -4,7 +4,7 @@ import TabelPengaduan from '../components/Tables/TablePengaduan';
 const TabelPengaduanPages = () => {
   return (
     <>
-      <Breadcrumb pageName="Tables" />
+      <Breadcrumb pageName="Tabel Pengaduan" />
 
       <div className="flex flex-col gap-10">
         <TabelPengaduan />

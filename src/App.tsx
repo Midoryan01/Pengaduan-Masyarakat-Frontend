@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import {  Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import Loader from './common/Loader';
 import PageTitle from './components/PageTitle';
 import ECommerce from './pages/Dashboard/ECommerce';
@@ -8,7 +8,7 @@ import FormPengaduan from './pages/Form/FormPengaduan';
 import FormTanggapan from './pages/Form/FormTanggapan';
 import TabelPengaduanPages from './pages/TabelPengaduan';
 import TabelTanggapanPages from './pages/TabelTanggapan';
-import AddTanggapan from './components/Tables/AddTanggapanModal';
+import AddTanggapan from './components/Tables/Tanggapan/AddTanggapanModal';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -37,7 +37,7 @@ function App() {
             </>
           </DefaultLayout>
         }
-      />  
+      />
       <Route
         path="/tabel-pengaduan"
         element={
@@ -53,10 +53,8 @@ function App() {
         path="/tabel-tanggapan"
         element={
           <DefaultLayout>
-            
-              <PageTitle title="Tabel Pengaduan" />
-              <TabelTanggapanPages />
-            
+            <PageTitle title="Tabel Pengaduan" />
+            <TabelTanggapanPages />
           </DefaultLayout>
         }
       />

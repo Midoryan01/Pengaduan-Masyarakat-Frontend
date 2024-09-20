@@ -4,7 +4,7 @@ import TabelTanggapan from '../components/Tables/TableTanggapan';
 const TabelTanggapanPages = () => {
   return (
     <>
-      <Breadcrumb pageName="Tables" />
+      <Breadcrumb pageName="Tabel Tanggapan" />
 
       <div className="flex flex-col gap-10">
         <TabelTanggapan />
