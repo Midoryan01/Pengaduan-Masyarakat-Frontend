@@ -7,7 +7,7 @@ import {
   PencilIcon,
   PrinterIcon,
 } from '@heroicons/react/20/solid';
-import { Petugas, Pengaduan, Tanggapan } from './type';
+import { Petugas, Pengaduan, Tanggapan } from '../../types/type';
 import EditTanggapanModal from './Tanggapan/EditModalTanggapan';
 import exportToExcelTanggapan from './Tanggapan/ExportTanggapan';
 
@@ -20,9 +20,7 @@ const TabelTanggapan: React.FC = () => {
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editingTanggapan, setEditingTanggapan] = useState<Tanggapan | null>(
-    null,
-  );
+  const [editingTanggapan, setEditingTanggapan] = useState<Tanggapan | null>(null,);
   const [petugasList, setPetugasList] = useState<Petugas[]>([]);
   const [pengaduanList, setPengaduanList] = useState<Pengaduan[]>([]);
 

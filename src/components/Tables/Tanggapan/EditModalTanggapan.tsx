@@ -1,5 +1,7 @@
 import React from 'react';
-import { Tanggapan, Pengaduan } from '../type';
+import { Pengaduan, Tanggapan } from '../../../types/type';
+
+
 
 interface EditTanggapanModalProps {
   isOpen: boolean;

@@ -7,7 +7,6 @@ import {
   PencilIcon,
   PrinterIcon,
 } from '@heroicons/react/20/solid'; // Import icons
-import * as XLSX from 'xlsx'; // Import the xlsx library
 import { Pengaduan } from '../../types/type';
 import ModalPengaduan from './Pengaduan/ModalPengaduan';
 import exportToExcelPengaduan from './Pengaduan/ExportPengaduan';
