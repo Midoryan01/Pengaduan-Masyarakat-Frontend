@@ -1,5 +1,5 @@
 import * as XLSX from 'xlsx';
-import { Petugas, Pengaduan, Tanggapan } from '../type';
+import { Petugas, Pengaduan, Tanggapan } from '../../../types/type';
 
 interface ExportData {
   No: number;
@@ -91,27 +91,47 @@ const exportToExcelTanggapan = (
     alignment: { horizontal: 'center', vertical: 'center', wrapText: true },
   };
 
-  // Apply style to header row
+  // Define default cell style
+  const defaultStyle = {
+    alignment: { vertical: 'center', wrapText: true },
+  };
+
+  // Apply styles to all cells and set column widths
   const range = XLSX.utils.decode_range(ws['!ref'] as string);
+  const colWidths = [];
   for (let C = range.s.c; C <= range.e.c; ++C) {
-    const address = XLSX.utils.encode_cell({ r: 0, c: C });
-    if (!ws[address]) continue;
-    ws[address].s = headerStyle;
+    let maxWidth = 10; // Default minimum width
+    for (let R = range.s.r; R <= range.e.r; ++R) {
+      const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
+      if (!ws[cellAddress]) continue;
+      
+      // Apply style
+      if (R === 0) {
+        ws[cellAddress].s = headerStyle;
+      } else {
+        ws[cellAddress].s = defaultStyle;
+      }
+      
+      // Calculate max width
+      const cellValue = ws[cellAddress].v;
+      if (typeof cellValue === 'string') {
+        maxWidth = Math.max(maxWidth, cellValue.length);
+      }
+    }
+    colWidths.push({ wch: Math.min(maxWidth + 2, 50) }); // Cap at 50
   }
+  ws['!cols'] = colWidths;
 
-  // Auto-size columns
-  const colWidths = dataToExport.reduce((acc, row) => {
-    header.forEach((key, i) => {
-      const cellValue = row[key as keyof ExportData]?.toString() ?? '';
-      acc[i] = Math.max(acc[i] ?? 0, cellValue.length, key.length);
-    });
-    return acc;
-  }, [] as number[]);
-
-  ws['!cols'] = colWidths.map((width) => ({ width: Math.min(width + 2, 30) }));
+  // Set row heights
+  const rowHeights = Array(range.e.r - range.s.r + 1).fill({ hpx: 65 });
+  rowHeights[0] = { hpx: 25 }; // Set header row height to 25
+  ws['!rows'] = rowHeights;
 
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Data Tanggapan');
+
+  // Set print area
+  ws['!printHeader'] = ['A1:P1']; // Adjust if your columns are different
 
   const timestamp = new Date().toISOString().split('T')[0];
   const filename = `data_tanggapan_${timestamp}.xlsx`;
