@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import axios from 'axios';
 import {
   ChevronLeftIcon,
@@ -10,6 +10,8 @@ import {
 import { Petugas, Pengaduan, Tanggapan } from '../../types/type';
 import EditTanggapanModal from './Tanggapan/EditModalTanggapan';
 import exportToExcelTanggapan from './Tanggapan/ExportTanggapan';
+import { useReactToPrint } from 'react-to-print';
+import PrintTanggapan from './Tanggapan/PrintTanggapan';
 
 const TabelTanggapan: React.FC = () => {
   const [tanggapanData, setTanggapanData] = useState<Tanggapan[]>([]);
@@ -23,6 +25,8 @@ const TabelTanggapan: React.FC = () => {
   const [editingTanggapan, setEditingTanggapan] = useState<Tanggapan | null>(null,);
   const [petugasList, setPetugasList] = useState<Petugas[]>([]);
   const [pengaduanList, setPengaduanList] = useState<Pengaduan[]>([]);
+  const [printingTanggapan, setPrintingTanggapan] = useState<Tanggapan | null>(null);
+  const printComponentRef = useRef<HTMLDivElement>(null);
 
   // Fetch data petugas dan pengaduan menggunakan Promise.all
   useEffect(() => {
@@ -140,7 +144,20 @@ const TabelTanggapan: React.FC = () => {
   const handleExport = () => {
     exportToExcelTanggapan(filteredData, pengaduanList, petugasList, indexOfFirstItem);
   };
+  
+  const handlePrint = useReactToPrint({
+    content: () => printComponentRef.current,
+    onAfterPrint: () => setPrintingTanggapan(null),
+  });
 
+  const triggerPrint = useCallback((item: Tanggapan) => {
+    setPrintingTanggapan(item);
+    setTimeout(() => {
+      handlePrint();
+    }, 100);
+  }, [handlePrint])
+
+  
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="flex flex-col md:flex-row justify-between mb-6">
@@ -266,6 +283,7 @@ const TabelTanggapan: React.FC = () => {
                     <button
                       className="text-green-500 hover:text-green-700"
                       title="Print"
+                      onClick={() => triggerPrint(item)}
                     >
                       <PrinterIcon className="h-5 w-5" />
                     </button>
@@ -315,6 +333,17 @@ const TabelTanggapan: React.FC = () => {
         pengaduanList={pengaduanList}
         onSubmit={handleEditSubmit}
       />
+      {/* Print Component (hidden) */}
+      <div style={{ display: 'none' }}>
+        {printingTanggapan && (
+          <PrintTanggapan
+            ref={printComponentRef}
+            tanggapan={printingTanggapan}
+            pengaduan={pengaduanList.find(p => p.id_pengaduan === printingTanggapan.id_pengaduan)}
+            petugas={petugasList.find(p => p.id_petugas === printingTanggapan.id_petugas)}
+          />
+        )}
+        </div>
     </div>
   );
 };
