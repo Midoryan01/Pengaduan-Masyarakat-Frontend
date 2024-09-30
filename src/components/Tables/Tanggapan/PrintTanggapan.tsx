@@ -2,7 +2,6 @@ import React, { forwardRef } from 'react';
 import { Tanggapan, Pengaduan, Petugas } from '../../../types/type';
 import logo from '../../../images/logo/logo-kemensos.png';
 
-
 interface PrintTanggapanProps {
   tanggapan: Tanggapan;
   pengaduan?: Pengaduan;
@@ -44,7 +43,7 @@ const DetailSection: React.FC<{ title: string; children: React.ReactNode }> = ({
 const Header: React.FC = () => (
   <div className="text-center mb-6 border-b-2 pb-4">
     <div className="flex justify-center items-center mb-2">
-    <img src={logo} alt="Logo" className="w-16 h-16 mr-4" />
+      <img src={logo} alt="Logo" className="w-16 h-16 mr-4" />
       <div>
         <h1 className="text-lg font-bold">KEMENTERIAN SOSIAL REPUBLIK INDONESIA</h1>
         <h1 className="text-lg font-bold">DIREKTORAT JENDERAL REHABILITASI SOSIAL</h1>
@@ -52,44 +51,43 @@ const Header: React.FC = () => (
       </div>
     </div>
     <p className="text-sm">JL.H. Moelyadi Djojomartono No.10 Margahayu, Bekasi 17113 telp(021)8801888 https://pangudiluhur.kemensos.go.id</p>
-    
   </div>
 );
 
 const PrintTanggapan = forwardRef<HTMLDivElement, PrintTanggapanProps>(
   ({ tanggapan, pengaduan, petugas }, ref) => {
     return (
-      <div ref={ref} className="p-8 text-black">
-        <Header />
+      <div ref={ref} className="flex flex-col min-h-screen p-8 text-black">
+        <div className="flex-grow">
+          <Header />
 
-        <h1 className="text-2xl font-bold text-center mb-6">SURAT TANGGAPAN PENGADUAN</h1>
+          <h1 className="text-2xl font-bold text-center mb-6">SURAT TANGGAPAN PENGADUAN</h1>
 
-        <div className="grid grid-cols-2 gap-12 mb-8">
-          <DetailSection title="Detail Pengaduan">
-            <DetailItem label="Nama" value={pengaduan?.nama} />
-            <DetailItem label="Alamat" value={pengaduan?.alamat} />
-            <DetailItem label="NIK" value={pengaduan?.nik} />
-            <DetailItem label="Agama" value={pengaduan?.agama} />
-            <DetailItem label="Keperluan" value={pengaduan?.keperluan} />
-            <DetailItem label="Telp/Email" value={pengaduan?.telp_email} />
-            <DetailItem label="Umur" value={pengaduan?.umur?.toString()} />
-            <DetailItem label="Bukti" value={pengaduan?.bukti ?? 'Tidak ada'} />
-            <DetailItem label="Status" value={pengaduan?.status} />
-            <DetailItem label="Tanggal Pengaduan" value={pengaduan ? formatDate(pengaduan.createdAt) : undefined} />
-          </DetailSection>
+          <div className="grid grid-cols-2 gap-12 mb-8">
+            <DetailSection title="Detail Pengaduan">
+              <DetailItem label="Nama" value={pengaduan?.nama} />
+              <DetailItem label="Alamat" value={pengaduan?.alamat} />
+              <DetailItem label="NIK" value={pengaduan?.nik} />
+              <DetailItem label="Agama" value={pengaduan?.agama} />
+              <DetailItem label="Keperluan" value={pengaduan?.keperluan} />
+              <DetailItem label="Telp/Email" value={pengaduan?.telp_email} />
+              <DetailItem label="Umur" value={pengaduan?.umur?.toString()} />
+              <DetailItem label="Bukti" value={pengaduan?.bukti ?? 'Tidak ada'} />
+              <DetailItem label="Status" value={pengaduan?.status} />
+              <DetailItem label="Tanggal Pengaduan" value={pengaduan ? formatDate(pengaduan.createdAt) : undefined} />
+            </DetailSection>
 
-          <DetailSection title="Detail Tanggapan">
-            <DetailItem label="Nama Petugas" value={petugas?.nama} />
-            <DetailItem label="Tanggapan" value={tanggapan.tanggapan} />
-            <DetailItem label="Tindak Lanjut" value={tanggapan.tindak_lanjut} />
-            <DetailItem label="Keterangan" value={tanggapan.keterangan} />
-            <DetailItem label="Tanggal Tanggapan" value={formatDate(tanggapan.tanggal)} />
-          </DetailSection>
+            <DetailSection title="Detail Tanggapan">
+              <DetailItem label="Nama Petugas" value={petugas?.nama} />
+              <DetailItem label="Tanggapan" value={tanggapan.tanggapan} />
+              <DetailItem label="Tindak Lanjut" value={tanggapan.tindak_lanjut} />
+              <DetailItem label="Keterangan" value={tanggapan.keterangan} />
+              <DetailItem label="Tanggal Tanggapan" value={formatDate(tanggapan.tanggal)} />
+            </DetailSection>
+          </div>
         </div>
 
-
-
-        <footer className="text-center mt-8 text-sm italic">
+        <footer className="mt-auto text-center text-sm italic">
           <p>Dokumen ini dicetak oleh sistem pada {formatDate(new Date().toISOString())} pukul {formatTime()}</p>
         </footer>
       </div>

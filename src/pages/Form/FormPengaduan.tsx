@@ -147,7 +147,7 @@ const FormPengaduan: React.FC = () => {
               {/* Field Telepon */}
               <div className="mb-4.5">
                 <label className="mb-2.5 block text-black dark:text-white">
-                  Telepon <span className="text-meta-1">*</span>
+                  Telepon/Email <span className="text-meta-1">*</span>
                 </label>
                 <input
                   type="text"
@@ -199,8 +199,7 @@ const FormPengaduan: React.FC = () => {
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full rounded bg-primary py-3 text-center text-white transition hover:bg-opacity-90"
-              >
+                className="w-full rounded bg-primary py-3 text-center text-white transition hover:bg-opacity-90">
                 Kirim Pengaduan
               </button>
             </div>

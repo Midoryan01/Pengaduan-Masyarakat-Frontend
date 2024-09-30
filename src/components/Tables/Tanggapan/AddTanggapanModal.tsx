@@ -25,16 +25,25 @@ const AddTanggapan: React.FC = () => {
         
         // Fetch pengaduan details
         const pengaduanResponse = await fetch(`http://localhost:5000/pengaduan/${id_pengaduan}`);
+        if (!pengaduanResponse.ok) {
+          throw new Error('Failed to fetch pengaduan data');
+        }
         const pengaduanData = await pengaduanResponse.json();
         setPengaduan(pengaduanData);
 
         // Fetch petugas list
         const petugasResponse = await fetch('http://localhost:5000/petugas');
+        if (!petugasResponse.ok) {
+          throw new Error('Failed to fetch petugas data');
+        }
         const petugasData = await petugasResponse.json();
         setPetugas(petugasData);
 
         // Check if tanggapan already exists
         const tanggapanResponse = await fetch(`http://localhost:5000/tanggapan/check/${id_pengaduan}`);
+        if (!tanggapanResponse.ok) {
+          throw new Error('Failed to check tanggapan existence');
+        }
         const tanggapanData = await tanggapanResponse.json();
         setTanggapanExists(tanggapanData.exists);
 
@@ -43,7 +52,7 @@ const AddTanggapan: React.FC = () => {
         }
       } catch (error) {
         console.error('Error fetching data:', error);
-        toast.error('Terjadi kesalahan saat mengambil data.');
+        toast.error('Terjadi kesalahan saat mengambil data. Silakan coba lagi.');
       } finally {
         setIsLoading(false);
       }
@@ -73,14 +82,14 @@ const AddTanggapan: React.FC = () => {
       });
       
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error('Failed to add tanggapan');
       }
       
       toast.success('Tanggapan berhasil ditambahkan');
       navigate(-1); // Go back to previous page
     } catch (error) {
       console.error('Error adding tanggapan:', error);
-      toast.error('Terjadi kesalahan saat menambahkan tanggapan.');
+      toast.error('Terjadi kesalahan saat menambahkan tanggapan. Silakan coba lagi.');
     }
   };
 
